@@ -31,7 +31,7 @@ export default function OpeningHoursDelivery() {
             <span>Öffnungszeiten & Service</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#fbf8f5] tracking-normal">
             Wann & Wohin wir liefern
           </h2>
 

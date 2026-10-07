@@ -22,17 +22,17 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#141210]/95 backdrop-blur-md border-b border-[#38322c]/80 shadow-xl py-3'
-          : 'bg-gradient-to-b from-[#141210]/90 to-transparent py-4 sm:py-5'
+          ? 'bg-[#141210]/95 backdrop-blur-md border-b border-[#38322c]/80 shadow-xl py-3.5 sm:py-4'
+          : 'bg-gradient-to-b from-[#141210]/95 via-[#141210]/80 to-transparent py-4 sm:py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4 lg:gap-8">
           
           {/* Logo & Brand Identity */}
-          <a href="#" className="flex items-center gap-3 group">
+          <a href="#" className="flex items-center gap-3 group shrink-0">
             {/* Italian Flag Colored Accent Pill */}
-            <div className="flex h-8 w-2 rounded-full overflow-hidden flex-shrink-0">
+            <div className="flex h-8 w-2 rounded-full overflow-hidden shrink-0">
               <span className="w-full bg-[#16a34a]" />
               <span className="w-full bg-[#ffffff]" />
               <span className="w-full bg-[#dc2626]" />
@@ -40,59 +40,88 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-serif text-base sm:text-2xl font-bold tracking-normal text-[#fbf8f5] group-hover:text-[#dc2626] transition-colors whitespace-nowrap">
-                  PIZZERIA NAPOLI
+                <span className="font-serif text-lg sm:text-2xl font-bold tracking-normal text-[#fbf8f5] group-hover:text-[#dc2626] transition-colors whitespace-nowrap">
+                  Pizzeria Napoli
                 </span>
-                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#dc2626]/20 text-[#f87171] border border-[#dc2626]/30 px-1 sm:px-1.5 py-0.5 rounded shrink-0">
-                  HORREM
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#dc2626]/20 text-[#f87171] border border-[#dc2626]/30 px-1.5 py-0.5 rounded shrink-0">
+                  Horrem
                 </span>
               </div>
-              <p className="text-xs text-[#a8a29e] hidden sm:block tracking-normal">
+              <p className="text-xs text-[#a8a29e] hidden sm:block tracking-normal font-sans">
                 Steinofen-Pizza & Trattoria · Hauptstraße 181
               </p>
             </div>
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-[#d6d3d1]">
+          {/* Desktop Navigation (Full on xl+) */}
+          <nav className="hidden xl:flex items-center gap-6 2xl:gap-8 text-sm font-medium text-[#d6d3d1]">
             <a
               href="#speisekarte"
               onClick={(e) => {
                 e.preventDefault();
                 onOpenMenu();
               }}
-              className="hover:text-[#fbf8f5] transition-colors cursor-pointer"
+              className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap cursor-pointer"
             >
               Speisekarte
             </a>
-            <a href="#qualitaet" className="hover:text-[#fbf8f5] transition-colors">
+            <a href="#qualitaet" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
               Tradition & Teig
             </a>
-            <a href="#ueber-uns" className="hover:text-[#fbf8f5] transition-colors">
+            <a href="#ueber-uns" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
               Über uns
             </a>
-            <a href="#instagram" className="hover:text-[#fbf8f5] transition-colors">
+            <a href="#instagram" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
               Instagram
             </a>
-            <a href="#bewertungen" className="hover:text-[#fbf8f5] transition-colors">
+            <a href="#bewertungen" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
               Bewertungen
             </a>
-            <a href="#oeffnungszeiten" className="hover:text-[#fbf8f5] transition-colors">
+            <a href="#oeffnungszeiten" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
               Öffnungszeiten & Lieferung
             </a>
             <button
               onClick={onOpenContact}
-              className="hover:text-[#fbf8f5] transition-colors cursor-pointer"
+              className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap cursor-pointer"
             >
               Kontakt & Anfahrt
             </button>
           </nav>
 
+          {/* Compact Desktop Navigation (Between lg and xl to prevent cramped links) */}
+          <nav className="hidden lg:flex xl:hidden items-center gap-5 text-sm font-medium text-[#d6d3d1]">
+            <a
+              href="#speisekarte"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenMenu();
+              }}
+              className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap cursor-pointer"
+            >
+              Speisekarte
+            </a>
+            <a href="#qualitaet" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
+              Tradition
+            </a>
+            <a href="#ueber-uns" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
+              Über uns
+            </a>
+            <a href="#bewertungen" className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap">
+              Bewertungen
+            </a>
+            <button
+              onClick={onOpenContact}
+              className="hover:text-[#fbf8f5] transition-colors whitespace-nowrap cursor-pointer"
+            >
+              Kontakt
+            </button>
+          </nav>
+
           {/* Call-to-Action & Quick Phone */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3 shrink-0">
             <a
               href="tel:022739917575"
-              className="inline-flex items-center gap-2.5 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-[0_4px_16px_rgba(220,38,38,0.35)] transition-all transform active:scale-95 group"
+              className="inline-flex items-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-bold px-4.5 py-2.5 rounded-full shadow-[0_4px_16px_rgba(220,38,38,0.35)] transition-all transform active:scale-95 group shrink-0 whitespace-nowrap"
             >
               <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
               <span className="tabular-nums tracking-wide">02273 9917575</span>
@@ -103,7 +132,7 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Navigation umschalten"
-            className="lg:hidden p-2 rounded-lg text-[#d6d3d1] hover:text-[#fbf8f5] hover:bg-[#24201d] transition-colors"
+            className="lg:hidden p-2 rounded-lg text-[#d6d3d1] hover:text-[#fbf8f5] hover:bg-[#24201d] transition-colors shrink-0"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>

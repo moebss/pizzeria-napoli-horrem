@@ -182,7 +182,7 @@ export default function MenuSection() {
             <span>Auswahl aus unserer Karte</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#fbf8f5] tracking-normal">
             Ofenfrische Spezialitäten
           </h2>
 
@@ -257,7 +257,7 @@ export default function MenuSection() {
                         {item.name}
                       </h3>
                     </div>
-                    <div className="font-serif text-xl font-black text-[#fbf8f5] tabular-nums whitespace-nowrap bg-[#292420] border border-[#443c35] px-3 py-1 rounded-xl">
+                    <div className="font-serif text-xl font-bold text-[#fbf8f5] tabular-nums whitespace-nowrap bg-[#292420] border border-[#443c35] px-3 py-1 rounded-xl">
                       {item.price}
                     </div>
                   </div>

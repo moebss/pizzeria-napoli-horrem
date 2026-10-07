@@ -44,7 +44,7 @@ export default function GoogleReviews() {
         <div className="bg-[#1c1917] border border-[#38322c] rounded-3xl p-6 sm:p-10 mb-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
             <div className="w-20 h-20 rounded-2xl bg-[#24201d] border border-[#443c35] flex flex-col items-center justify-center shrink-0">
-              <span className="font-serif text-3xl font-black text-[#fbf8f5]">4.7</span>
+              <span className="font-serif text-3xl font-bold text-[#fbf8f5]">4.7</span>
               <div className="flex items-center gap-0.5 text-[#f59e0b]">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-3 h-3 fill-[#f59e0b]" />

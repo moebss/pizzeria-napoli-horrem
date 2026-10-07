@@ -20,7 +20,7 @@ export default function Footer({ onOpenLegal, onOpenMenu }: FooterProps) {
                 <span className="w-full bg-[#ffffff]" />
                 <span className="w-full bg-[#dc2626]" />
               </div>
-              <span className="font-serif text-xl font-extrabold text-[#fbf8f5] tracking-tight">
+              <span className="font-serif text-xl font-bold text-[#fbf8f5] tracking-normal">
                 PIZZERIA NAPOLI
               </span>
             </div>
