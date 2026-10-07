@@ -182,7 +182,7 @@ export default function MenuSection() {
             <span>Auswahl aus unserer Karte</span>
           </div>
 
-          <h2 className="font-['Syne',sans-serif] text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
             Ofenfrische Spezialitäten
           </h2>
 
@@ -253,11 +253,11 @@ export default function MenuSection() {
                       <span className="text-[11px] font-bold uppercase tracking-wider text-[#a8a29e]">
                         {item.categoryLabel}
                       </span>
-                      <h3 className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5] group-hover:text-[#f87171] transition-colors">
+                      <h3 className="font-serif text-xl font-bold text-[#fbf8f5] group-hover:text-[#f87171] transition-colors">
                         {item.name}
                       </h3>
                     </div>
-                    <div className="font-['Syne',sans-serif] text-xl font-black text-[#fbf8f5] tabular-nums whitespace-nowrap bg-[#292420] border border-[#443c35] px-3 py-1 rounded-xl">
+                    <div className="font-serif text-xl font-black text-[#fbf8f5] tabular-nums whitespace-nowrap bg-[#292420] border border-[#443c35] px-3 py-1 rounded-xl">
                       {item.price}
                     </div>
                   </div>
@@ -301,7 +301,7 @@ export default function MenuSection() {
               <Check className="w-4 h-4" />
               <span>Direktbestell-Vorteil für Horrem & Umgebung</span>
             </div>
-            <h4 className="font-['Syne',sans-serif] text-lg font-bold text-[#fbf8f5]">
+            <h4 className="font-serif text-lg font-bold text-[#fbf8f5]">
               Keine Plattformgebühren · Frischer & schneller bei dir
             </h4>
             <p className="text-xs sm:text-sm text-[#a8a29e]">

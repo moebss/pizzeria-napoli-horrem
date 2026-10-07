@@ -43,7 +43,7 @@ export default function QualityPromise() {
             <span>Warum Pizzeria Napoli?</span>
           </div>
 
-          <h2 className="font-['Syne',sans-serif] text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
             Echte Handwerkskunst statt schneller Massenware
           </h2>
 
@@ -72,7 +72,7 @@ export default function QualityPromise() {
                     </span>
                   </div>
 
-                  <h3 className="font-['Syne',sans-serif] text-2xl font-bold text-[#fbf8f5] mb-1">
+                  <h3 className="font-serif text-2xl font-bold text-[#fbf8f5] mb-1">
                     {p.title}
                   </h3>
                   <div className="text-sm font-semibold text-[#f87171] mb-3">

@@ -23,7 +23,7 @@ export default function LegalModals({ type, onClose }: LegalModalsProps) {
 
         {type === 'impressum' ? (
           <div>
-            <h2 className="font-['Syne',sans-serif] text-2xl sm:text-3xl font-black text-[#fbf8f5] mb-4">
+            <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#fbf8f5] mb-4">
               Impressum
             </h2>
 
@@ -79,7 +79,7 @@ export default function LegalModals({ type, onClose }: LegalModalsProps) {
               <span className="text-xs font-bold uppercase tracking-wider">Zero-Tracker & DSGVO-Konform</span>
             </div>
 
-            <h2 className="font-['Syne',sans-serif] text-2xl sm:text-3xl font-black text-[#fbf8f5] mb-4">
+            <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#fbf8f5] mb-4">
               Datenschutzerklärung
             </h2>
 

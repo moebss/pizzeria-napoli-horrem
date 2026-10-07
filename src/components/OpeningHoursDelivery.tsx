@@ -31,7 +31,7 @@ export default function OpeningHoursDelivery() {
             <span>Öffnungszeiten & Service</span>
           </div>
 
-          <h2 className="font-['Syne',sans-serif] text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
             Wann & Wohin wir liefern
           </h2>
 
@@ -50,7 +50,7 @@ export default function OpeningHoursDelivery() {
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">
+                <h3 className="font-serif text-xl font-bold text-[#fbf8f5]">
                   Öffnungszeiten Pizzeria Napoli
                 </h3>
                 <p className="text-xs text-[#a8a29e]">Hauptstraße 181, 50169 Kerpen-Horrem</p>
@@ -91,7 +91,7 @@ export default function OpeningHoursDelivery() {
                 <Truck className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">
+                <h3 className="font-serif text-xl font-bold text-[#fbf8f5]">
                   Unser Liefergebiet im Rhein-Erft-Kreis
                 </h3>
                 <p className="text-xs text-[#a8a29e]">Schnell, zuverlässig & heiß in Thermoboxen</p>
@@ -124,7 +124,7 @@ export default function OpeningHoursDelivery() {
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Schnellste Bestellung ohne Wartezeit</span>
               </div>
-              <h4 className="font-['Syne',sans-serif] text-lg font-bold text-[#fbf8f5]">
+              <h4 className="font-serif text-lg font-bold text-[#fbf8f5]">
                 Jetzt anrufen & frisch bestellen
               </h4>
               <p className="text-xs text-[#a8a29e] leading-relaxed">

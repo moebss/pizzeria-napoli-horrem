@@ -40,10 +40,10 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-['Syne',sans-serif] text-base sm:text-2xl font-extrabold tracking-tight text-[#fbf8f5] group-hover:text-[#dc2626] transition-colors">
+                <span className="font-serif text-base sm:text-2xl font-bold tracking-normal text-[#fbf8f5] group-hover:text-[#dc2626] transition-colors whitespace-nowrap">
                   PIZZERIA NAPOLI
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#dc2626]/20 text-[#f87171] border border-[#dc2626]/30 px-1.5 py-0.5 rounded">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#dc2626]/20 text-[#f87171] border border-[#dc2626]/30 px-1 sm:px-1.5 py-0.5 rounded shrink-0">
                   HORREM
                 </span>
               </div>

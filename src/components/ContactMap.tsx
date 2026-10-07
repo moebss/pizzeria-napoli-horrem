@@ -12,7 +12,7 @@ export default function ContactMap() {
             <span>Standort & Kontakt</span>
           </div>
 
-          <h2 className="font-['Syne',sans-serif] text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
             Besuche uns in Kerpen-Horrem
           </h2>
 
@@ -27,7 +27,7 @@ export default function ContactMap() {
           <div className="lg:col-span-5 bg-[#1c1917] border border-[#38322c] rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between space-y-6">
             <div className="space-y-6">
               <div>
-                <h3 className="font-['Syne',sans-serif] text-2xl font-bold text-[#fbf8f5] mb-1">
+                <h3 className="font-serif text-2xl font-bold text-[#fbf8f5] mb-1">
                   Pizzeria Napoli
                 </h3>
                 <p className="text-sm text-[#a8a29e]">Baran & Baran GbR</p>
@@ -108,7 +108,7 @@ export default function ContactMap() {
                 </div>
 
                 <div className="space-y-1">
-                  <div className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">
+                  <div className="font-serif text-xl font-bold text-[#fbf8f5]">
                     Pizzeria Napoli Horrem
                   </div>
                   <div className="text-sm text-[#ef4444] font-semibold">

@@ -20,7 +20,7 @@ export default function Footer({ onOpenLegal, onOpenMenu }: FooterProps) {
                 <span className="w-full bg-[#ffffff]" />
                 <span className="w-full bg-[#dc2626]" />
               </div>
-              <span className="font-['Syne',sans-serif] text-xl font-extrabold text-[#fbf8f5] tracking-tight">
+              <span className="font-serif text-xl font-extrabold text-[#fbf8f5] tracking-tight">
                 PIZZERIA NAPOLI
               </span>
             </div>
@@ -44,7 +44,7 @@ export default function Footer({ onOpenLegal, onOpenMenu }: FooterProps) {
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="font-['Syne',sans-serif] text-sm font-bold uppercase tracking-wider text-[#fbf8f5]">
+            <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#fbf8f5]">
               Navigation
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
@@ -85,7 +85,7 @@ export default function Footer({ onOpenLegal, onOpenMenu }: FooterProps) {
 
           {/* Contact & Address */}
           <div className="space-y-3">
-            <h4 className="font-['Syne',sans-serif] text-sm font-bold uppercase tracking-wider text-[#fbf8f5]">
+            <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#fbf8f5]">
               Kontakt & Bestellung
             </h4>
             <div className="space-y-2 text-xs sm:text-sm">
@@ -113,7 +113,7 @@ export default function Footer({ onOpenLegal, onOpenMenu }: FooterProps) {
 
           {/* Legal / Rechtliches */}
           <div className="space-y-3">
-            <h4 className="font-['Syne',sans-serif] text-sm font-bold uppercase tracking-wider text-[#fbf8f5]">
+            <h4 className="font-serif text-sm font-bold uppercase tracking-wider text-[#fbf8f5]">
               Rechtliches & DSGVO
             </h4>
             <p className="text-xs text-[#78716c] leading-relaxed">

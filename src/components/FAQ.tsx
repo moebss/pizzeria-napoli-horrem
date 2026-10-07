@@ -42,7 +42,7 @@ export default function FAQ() {
             <span>Häufige Fragen</span>
           </div>
 
-          <h2 className="font-['Syne',sans-serif] text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-black text-[#fbf8f5] tracking-tight">
             Fragen & Antworten
           </h2>
 
@@ -65,7 +65,7 @@ export default function FAQ() {
                   className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:text-[#f87171] transition-colors"
                   aria-expanded={isOpen}
                 >
-                  <span className="font-['Syne',sans-serif] font-bold text-base sm:text-lg text-[#fbf8f5]">
+                  <span className="font-serif font-bold text-base sm:text-lg text-[#fbf8f5]">
                     {faq.q}
                   </span>
                   <ChevronDown

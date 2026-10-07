@@ -27,15 +27,15 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center space-y-6 sm:space-y-8">
         
         {/* Eyebrow Badge */}
-        <div className="inline-flex items-center gap-2 bg-[#24201d]/90 border border-[#443c35] px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-[#f87171] shadow-lg backdrop-blur-md">
+        <div className="inline-flex items-center gap-2 bg-[#24201d]/90 border border-[#443c35] px-3 sm:px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wide sm:tracking-widest text-[#f87171] shadow-lg backdrop-blur-md max-w-full">
           <Flame className="w-3.5 h-3.5 text-[#ef4444] shrink-0" />
-          <span>ORIGINAL STEINOFEN-PIZZA · KERPEN-HORREM</span>
+          <span className="truncate">ORIGINAL STEINOFEN-PIZZA · KERPEN-HORREM</span>
         </div>
 
         {/* Display Headline */}
-        <h1 className="font-['Syne',sans-serif] text-[26px] sm:text-5xl md:text-7xl lg:text-8xl font-black text-[#fbf8f5] tracking-tight leading-[1.15] sm:leading-[1.08] max-w-5xl mx-auto">
+        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#fbf8f5] tracking-normal leading-[1.18] max-w-5xl mx-auto">
           Knuspriger Teig & <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ef4444] via-[#f87171] to-[#fb923c]">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ef4444] via-[#f87171] to-[#fb923c] italic font-normal inline-block">
             italienische Leidenschaft
           </span>.
         </h1>
@@ -48,11 +48,11 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2 sm:pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 w-full max-w-md sm:max-w-none mx-auto">
           <button
             onClick={onOpenMenu}
             aria-label="Speisekarte ansehen"
-            className="bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-[0_8px_30px_rgba(220,38,38,0.45)] transition-all transform active:scale-98 flex items-center gap-3 cursor-pointer group"
+            className="w-full sm:w-auto bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-[0_8px_30px_rgba(220,38,38,0.45)] transition-all transform active:scale-98 flex items-center justify-center gap-3 cursor-pointer group"
           >
             <UtensilsCrossed className="w-5 h-5 text-white/90" />
             <span>Speisekarte ansehen</span>
@@ -61,11 +61,11 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
 
           <a
             href="tel:022739917575"
-            className="bg-[#24201d]/90 hover:bg-[#2d2823] text-[#fbf8f5] font-semibold text-base sm:text-lg px-7 py-4 sm:py-5 rounded-full border border-[#443c35] hover:border-[#dc2626]/60 shadow-lg backdrop-blur-md transition-all flex items-center gap-3 active:scale-98"
+            className="w-full sm:w-auto bg-[#24201d]/90 hover:bg-[#2d2823] text-[#fbf8f5] font-semibold text-base sm:text-lg px-6 sm:px-7 py-4 sm:py-5 rounded-full border border-[#443c35] hover:border-[#dc2626]/60 shadow-lg backdrop-blur-md transition-all flex items-center justify-center gap-2.5 sm:gap-3 active:scale-98"
           >
-            <Phone className="w-5 h-5 text-[#ef4444]" />
+            <Phone className="w-5 h-5 text-[#ef4444] shrink-0" />
             <span className="tabular-nums font-bold">02273 9917575</span>
-            <span className="text-xs bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/40 px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/40 px-2 py-0.5 rounded-full shrink-0">
               Direkt bestellen
             </span>
           </a>
@@ -89,7 +89,7 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
                 <Star key={i} className="w-4 h-4 fill-[#f59e0b]" />
               ))}
             </div>
-            <div className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">4.7 Sterne</div>
+            <div className="font-serif text-xl font-bold text-[#fbf8f5]">4.7 Sterne</div>
             <div className="text-xs text-[#a8a29e]">274+ Google Rezensionen</div>
           </div>
 
@@ -99,7 +99,7 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
               <Clock className="w-4 h-4" />
               <span className="text-xs font-bold text-[#f87171] uppercase tracking-wider">Tradition</span>
             </div>
-            <div className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">48h Teigruhe</div>
+            <div className="font-serif text-xl font-bold text-[#fbf8f5]">48h Teigruhe</div>
             <div className="text-xs text-[#a8a29e]">Bekömmlich & kross gebacken</div>
           </div>
 
@@ -109,7 +109,7 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
               <Truck className="w-4 h-4" />
               <span className="text-xs font-bold text-[#4ade80] uppercase tracking-wider">Express</span>
             </div>
-            <div className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">Heiß geliefert</div>
+            <div className="font-serif text-xl font-bold text-[#fbf8f5]">Heiß geliefert</div>
             <div className="text-xs text-[#a8a29e]">Isolierte Thermoboxen</div>
           </div>
 
@@ -119,7 +119,7 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
               <Flame className="w-4 h-4" />
               <span className="text-xs font-bold text-[#fb923c] uppercase tracking-wider">Steinofen</span>
             </div>
-            <div className="font-['Syne',sans-serif] text-xl font-bold text-[#fbf8f5]">Original Steinofen</div>
+            <div className="font-serif text-xl font-bold text-[#fbf8f5]">Original Steinofen</div>
             <div className="text-xs text-[#a8a29e]">Hauptstraße 181, Horrem</div>
           </div>
 
