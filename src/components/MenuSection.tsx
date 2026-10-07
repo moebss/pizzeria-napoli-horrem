@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Phone, Flame, Utensils, Check } from 'lucide-react';
 
+import imgMargherita from '../images/pizza_margherita.jpg';
 import imgDiavola from '../images/pizza_diavola.jpg';
 import imgProsciutto from '../images/pizza_prosciutto.jpg';
+import imgNapoli from '../images/pizza_napoli.jpg';
+import imgQuattroFormaggi from '../images/pizza_quattro_formaggi.jpg';
 import imgPastaForno from '../images/pasta_al_forno.jpg';
 import imgPizzabroetchen from '../images/pizzabroetchen.jpg';
 import imgCaprese from '../images/insalata_caprese.jpg';
@@ -16,7 +19,7 @@ interface MenuItem {
   category: Category;
   categoryLabel: string;
   price: string;
-  image?: string;
+  image: string;
   badge?: string;
   description: string;
   ingredients: string[];
@@ -37,6 +40,18 @@ export default function MenuSection() {
   ];
 
   const menuItems: MenuItem[] = [
+    {
+      id: 'pizza-margherita',
+      name: 'Pizza Margherita Classica',
+      category: 'pizza',
+      categoryLabel: 'Steinofen Pizza',
+      price: '8,50 €',
+      image: imgMargherita,
+      badge: 'Der Klassiker',
+      vegetarian: true,
+      description: 'Das pure Geschmackserlebnis Neapels: Sonnengereifte San Marzano Tomatensauce, cremiger Fior di Latte Mozzarella, frische Basilikumblätter & natives Olivenöl Extra.',
+      ingredients: ['San Marzano Tomaten', 'Fior di Latte Mozzarella', 'Frisches Basilikum', 'Natives Olivenöl Extra']
+    },
     {
       id: 'pizza-diavola',
       name: 'Pizza Diavola',
@@ -61,22 +76,12 @@ export default function MenuSection() {
       ingredients: ['Prosciutto di Parma', 'Wilder Rucola', 'Kirschtomaten', 'Parmigiano Reggiano']
     },
     {
-      id: 'pizza-margherita',
-      name: 'Pizza Margherita Classica',
-      category: 'pizza',
-      categoryLabel: 'Steinofen Pizza',
-      price: '8,50 €',
-      badge: 'Der Klassiker',
-      vegetarian: true,
-      description: 'Das pure Geschmackserlebnis Neapels: Sonnengereifte Tomatensauce, cremiger Fior di Latte Mozzarella, frische Basilikumblätter & Olivenöl.',
-      ingredients: ['San Marzano Tomatensauce', 'Fior di Latte Mozzarella', 'Frisches Basilikum', 'Natives Olivenöl Extra']
-    },
-    {
       id: 'pizza-napoli',
       name: 'Pizza Napoli Originale',
       category: 'pizza',
       categoryLabel: 'Steinofen Pizza',
       price: '10,50 €',
+      image: imgNapoli,
       badge: 'Traditionell',
       description: 'Kräftig im Geschmack nach altem Rezept mit aromatischen Anchovis (Sardellen), sizilianischen Kapern, schwarzen Oliven und Oregano.',
       ingredients: ['San Marzano Tomaten', 'Mozzarella', 'Sardellenfilets', 'Kapern & Oliven']
@@ -87,8 +92,10 @@ export default function MenuSection() {
       category: 'pizza',
       categoryLabel: 'Steinofen Pizza',
       price: '11,50 €',
+      image: imgQuattroFormaggi,
+      badge: 'Feinste Käseauswahl',
       vegetarian: true,
-      description: 'Vier perfekt harmonierende Käsesorten sanft im Ofen geschmolzen: Milder Mozzarella, herzhafter Gorgonzola D.O.P., Fontina & Parmesan.',
+      description: 'Vier perfekt harmonierende Käsesorten sanft im Steinofen geschmolzen: Milder Mozzarella, herzhafter Gorgonzola D.O.P., Fontina & Parmesan.',
       ingredients: ['Mozzarella', 'Gorgonzola D.O.P.', 'Parmigiano Reggiano', 'Fontina']
     },
     {
@@ -103,15 +110,6 @@ export default function MenuSection() {
       ingredients: ['Hausgemachte Teigplatten', 'Klassisches Bolognese-Ragù', 'Feine Béchamelsauce', 'Goldene Käsekruste']
     },
     {
-      id: 'rigatoni-al-forno',
-      name: 'Rigatoni Napoli al Forno',
-      category: 'pasta',
-      categoryLabel: 'Pasta al Forno',
-      price: '11,00 €',
-      description: 'Röhrennudeln mit saftigen Schinkenstreifen, frischen braunen Champignons in pikanter Sahne-Tomatensauce, reichlich mit Käse gratiniert.',
-      ingredients: ['Rigatoni al Dente', 'Frische Champignons', 'Hinterschinken', 'Sahne-Tomatensauce']
-    },
-    {
       id: 'pizzabroetchen-dips',
       name: 'Ofenfrische Pizzabrötchen (8 Stk.)',
       category: 'broetchen',
@@ -124,15 +122,6 @@ export default function MenuSection() {
       ingredients: ['8 Stück frisch aus dem Steinofen', 'Hausgemachte Kräuterbutter', 'Cremige Aioli']
     },
     {
-      id: 'pizzabroetchen-gefuellt',
-      name: 'Gefüllte Pizzabrötchen mit Käse & Salami (8 Stk.)',
-      category: 'broetchen',
-      categoryLabel: 'Pizzabrötchen',
-      price: '6,50 €',
-      description: 'Knusprig gebackene Teigrollen gefüllt mit geschmolzenem Gouda und feiner Salami. Inklusive hausgemachtem Kräuterdip.',
-      ingredients: ['8 gefüllte Teigrollen', 'Herzhafter Gouda-Käse', 'Würzige Salami', 'Inkl. Aioli oder Kräuterbutter']
-    },
-    {
       id: 'insalata-caprese',
       name: 'Insalata Caprese',
       category: 'salate',
@@ -143,15 +132,6 @@ export default function MenuSection() {
       vegetarian: true,
       description: 'Aromatische reife Strauchtomaten mit cremigem Büffelmozzarella, erntefrischem Basilikum, Meersalz und feinstem Aceto Balsamico di Modena.',
       ingredients: ['Büffelmozzarella', 'Reife Strauchtomaten', 'Frisches Basilikum', 'Aceto Balsamico & Olivenöl']
-    },
-    {
-      id: 'insalata-pomodori-cetriolo',
-      name: 'Insalata Pomodori e Cetriolo',
-      category: 'salate',
-      categoryLabel: 'Frische Salate',
-      price: '11,50 €',
-      description: 'Knackiger grüner Salat mit Tomaten, Gurken, roten Zwiebeln, saftigem Thunfisch und hauseigenem italienischen Kräuterdressing.',
-      ingredients: ['Grüner Blattsalat', 'Thunfisch', 'Gurken & Tomaten', 'Hausgemachtes Dressing']
     },
     {
       id: 'tiramisu-hausgemacht',
@@ -216,34 +196,32 @@ export default function MenuSection() {
               key={item.id}
               className="bg-[#1f1b18] border border-[#38322c] rounded-2xl overflow-hidden hover:border-[#dc2626]/50 transition-all duration-300 shadow-xl flex flex-col group"
             >
-              {/* Optional Food Image */}
-              {item.image && (
-                <div className="relative aspect-4/3 w-full overflow-hidden bg-[#141210]">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {item.badge && (
-                    <span className="absolute top-3 left-3 bg-[#dc2626]/95 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
-                      {item.badge}
-                    </span>
-                  )}
-                  {item.spicy && (
-                    <span className="absolute top-3 right-3 bg-[#141210]/85 backdrop-blur-xs text-[#f87171] border border-[#dc2626]/40 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                      <Flame className="w-3 h-3 text-[#ef4444]" />
-                      Pikant
-                    </span>
-                  )}
-                  {item.vegetarian && (
-                    <span className="absolute top-3 right-3 bg-[#141210]/85 backdrop-blur-xs text-[#4ade80] border border-[#16a34a]/40 text-[11px] font-bold px-2.5 py-1 rounded-full">
-                      🌱 Veggie
-                    </span>
-                  )}
-                </div>
-              )}
+              {/* Food Image */}
+              <div className="relative aspect-4/3 w-full overflow-hidden bg-[#141210]">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+                {item.badge && (
+                  <span className="absolute top-3 left-3 bg-[#dc2626]/95 backdrop-blur-xs text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                    {item.badge}
+                  </span>
+                )}
+                {item.spicy && (
+                  <span className="absolute top-3 right-3 bg-[#141210]/85 backdrop-blur-xs text-[#f87171] border border-[#dc2626]/40 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <Flame className="w-3 h-3 text-[#ef4444]" />
+                    Pikant
+                  </span>
+                )}
+                {item.vegetarian && (
+                  <span className="absolute top-3 right-3 bg-[#141210]/85 backdrop-blur-xs text-[#4ade80] border border-[#16a34a]/40 text-[11px] font-bold px-2.5 py-1 rounded-full">
+                    🌱 Veggie
+                  </span>
+                )}
+              </div>
 
               {/* Card Content */}
               <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
@@ -294,8 +272,19 @@ export default function MenuSection() {
           ))}
         </div>
 
+        {/* Additional Dishes Notice */}
+        <div className="mt-12 bg-[#1f1b18] border border-[#38322c] rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto text-center space-y-3">
+          <h4 className="font-serif text-lg sm:text-xl font-bold text-[#fbf8f5]">
+            Weitere Spezialitäten & individuelle Wünsche
+          </h4>
+          <p className="text-sm text-[#a8a29e] max-w-2xl mx-auto leading-relaxed">
+            Ob Rigatoni Napoli al Forno, gefüllte Pizzabrötchen mit Käse &amp; Salami, frische bunte Salate oder Extrawünsche: 
+            Wir bereiten jedes Gericht ofenfrisch für Sie zu. Rufen Sie uns einfach an!
+          </p>
+        </div>
+
         {/* Info Box: Keine Plattformgebühren & Sonderwünsche */}
-        <div className="mt-12 bg-[#24201d] border border-[#443c35] rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mt-6 bg-[#24201d] border border-[#443c35] rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 text-[#4ade80] text-sm font-bold">
               <Check className="w-4 h-4" />
