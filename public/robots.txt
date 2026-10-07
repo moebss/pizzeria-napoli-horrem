@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# AI Search Engines (ChatGPT Search, Perplexity, Claude Search)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+Sitemap: https://moebss.github.io/pizzeria-napoli-horrem/sitemap.xml

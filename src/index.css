@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+@import '@fontsource/syne/400.css';
+@import '@fontsource/syne/700.css';
+@import '@fontsource/syne/800.css';
+@import '@fontsource/space-grotesk/400.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/700.css';
+
+/* ==========================================================================
+   Design-Familie 4: Urbane Energie & Italienische Handwerkskunst
+   Sub-Code: 4f (Pizzeria / Lieferservice)
+   Pizzeria Napoli Kerpen-Horrem
+   Color Scheme: dark (Warmes Ofenfeuer, Espresso & Tomatenrot)
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+}
+
+@theme {
+  /* Typografie */
+  --font-display: "Syne", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+
+  /* Typografie Skala (Clamp) */
+  --text-eyebrow: clamp(0.7rem, 0.65rem + 0.2vw, 0.8rem);
+  --text-small:   clamp(0.8rem, 0.78rem + 0.15vw, 0.875rem);
+  --text-body:    clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --text-body-lg: clamp(1.125rem, 1.05rem + 0.3vw, 1.375rem);
+  --text-h3:      clamp(1.75rem, 1.5rem + 1.2vw, 2.5rem);
+  --text-h2:      clamp(2.25rem, 1.9rem + 1.8vw, 3.5rem);
+  --text-h1:      clamp(2.75rem, 2.2rem + 2.8vw, 4.75rem);
+
+  /* Farben & Akzente: Warmes Espresso, Italienisches Tomatenrot, Basilikumgrün */
+  --color-accent: #dc2626;
+  --color-accent-hover: #b91c1c;
+  --color-accent-warm: #ea580c;
+  --color-bg-base: #141210;
+  --color-bg-card: #1c1917;
+  --color-bg-card-subtle: #24201d;
+  --color-text-primary: #fbf8f5;
+  --color-text-muted: #a8a29e;
+  --color-border-subtle: #38322c;
+
+  /* Ecken-Geometrie */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1.0rem;
+  --radius-xl: 1.5rem;
+
+  /* Motion & Interaktion */
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-reveal: 400ms;
+}
+
+/* Custom Scrollbar & Utilities */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+
+::selection {
+  background-color: #dc2626;
+  color: #ffffff;
+}
