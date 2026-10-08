@@ -14,6 +14,10 @@ import {
   AlertCircle,
   CreditCard,
   Banknote,
+  Lock,
+  ArrowLeft,
+  ShieldAlert,
+  Loader2,
 } from 'lucide-react';
 
 import imgMargherita from '../images/pizza_margherita.jpg';
@@ -157,6 +161,8 @@ interface ConfirmedOrder {
   items: CartItem[];
   deliveryType: 'delivery' | 'pickup';
   paymentMethod: 'online' | 'cash';
+  onlineProvider?: string;
+  transactionId?: string;
   total: number;
   subtotal: number;
   deliveryFee: number;
@@ -179,7 +185,7 @@ export default function OnlineOrderModal({
   const [deliveryType, setDeliveryType] = useState<'delivery' | 'pickup'>('delivery');
   const [activeTab, setActiveTab] = useState<'all' | 'pizza' | 'pasta' | 'broetchen' | 'salate' | 'dessert' | 'drinks'>('all');
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [checkoutStep, setCheckoutStep] = useState<'menu' | 'checkout' | 'confirmed'>('menu');
+  const [checkoutStep, setCheckoutStep] = useState<'menu' | 'checkout' | 'payment' | 'confirmed'>('menu');
 
   // Checkout Formular
   const [customerName, setCustomerName] = useState('');
@@ -188,6 +194,10 @@ export default function OnlineOrderModal({
   const [plzCity, setPlzCity] = useState('50169 Kerpen-Horrem');
   const [paymentMethod, setPaymentMethod] = useState<'online' | 'cash'>('online');
   const [orderComment, setOrderComment] = useState('');
+
+  // Payment Gateway State
+  const [selectedOnlineMethod, setSelectedOnlineMethod] = useState<'paypal' | 'applepay' | 'card' | 'klarna' | 'wero'>('paypal');
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'failed'>('idle');
   const [confirmedOrder, setConfirmedOrder] = useState<ConfirmedOrder | null>(null);
 
   useEffect(() => {
@@ -245,13 +255,31 @@ export default function OnlineOrderModal({
     return item ? item.quantity : 0;
   };
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  // Schritt 2 Checkout Formular abschicken
+  const handleSubmitCheckout = (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
     if (deliveryType === 'delivery' && isDeliveryUnderMin) return;
 
+    if (paymentMethod === 'online') {
+      // Weiterleitung zum interaktiven Zahlungs-Gateway
+      setPaymentStatus('idle');
+      setCheckoutStep('payment');
+    } else {
+      // Barzahlung: Direkt abschließen
+      finalizeOrder('cash');
+    }
+  };
+
+  // Bestellung finalisieren (entweder nach erfolgreicher Online-Zahlung oder bei Barzahlung)
+  const finalizeOrder = (method: 'online' | 'cash', onlineProvider?: string) => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const orderId = `#NAP-${randomNum}`;
+    const transactionId =
+      method === 'online'
+        ? `#MOL-${Math.floor(100000 + Math.random() * 900000)}`
+        : undefined;
+
     const estimatedTime =
       deliveryType === 'delivery' ? 'ca. 30 - 45 Minuten' : 'ca. 15 - 20 Minuten';
 
@@ -259,12 +287,14 @@ export default function OnlineOrderModal({
       orderId,
       items: [...cart],
       deliveryType,
-      paymentMethod,
+      paymentMethod: method,
+      onlineProvider,
+      transactionId,
       total,
       subtotal,
       deliveryFee,
       customerName: customerName || 'Gast',
-      phone: phone || '02273 / Nicht angegeben',
+      phone: phone || '02273 / Angegeben',
       address:
         deliveryType === 'delivery'
           ? `${street}, ${plzCity}`
@@ -277,9 +307,29 @@ export default function OnlineOrderModal({
     setCart([]);
   };
 
+  // Online Zahlung ausführen (simuliert echten Mollie/PayPal Flow)
+  const handleExecuteOnlinePayment = () => {
+    setPaymentStatus('processing');
+    setTimeout(() => {
+      const providerNames: Record<string, string> = {
+        paypal: 'PayPal',
+        applepay: 'Apple Pay',
+        card: 'Kreditkarte (Visa / Mastercard)',
+        klarna: 'Klarna Sofort',
+        wero: 'Wero (EPI)',
+      };
+      finalizeOrder('online', providerNames[selectedOnlineMethod] || 'Mollie Gateway');
+    }, 1300);
+  };
+
+  const handleSimulatePaymentCancel = () => {
+    setPaymentStatus('failed');
+  };
+
   const handleResetOrder = () => {
     setCheckoutStep('menu');
     setConfirmedOrder(null);
+    setPaymentStatus('idle');
   };
 
   const filteredDishes =
@@ -614,7 +664,7 @@ export default function OnlineOrderModal({
           {/* ================= STEP 2: CHECKOUT FORMULAR ================= */}
           {checkoutStep === 'checkout' && (
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-2xl mx-auto w-full">
-              <form onSubmit={handlePlaceOrder} className="space-y-5">
+              <form onSubmit={handleSubmitCheckout} className="space-y-5">
                 <div className="flex items-center justify-between pb-3 border-b border-[#2e2823]">
                   <div>
                     <h4 className="font-serif font-bold text-base text-[#fbf8f5]">
@@ -720,29 +770,34 @@ export default function OnlineOrderModal({
                 {/* Zahlungsart */}
                 <div className="bg-[#24201d] p-4 rounded-2xl border border-[#38322c] space-y-3">
                   <h5 className="text-xs font-bold uppercase tracking-wider text-[#ef4444]">
-                    {deliveryType === 'delivery' ? '3. Zahlungsart' : '2. Zahlungsart'}
+                    {deliveryType === 'delivery' ? '3. Zahlungsart wählen' : '2. Zahlungsart wählen'}
                   </h5>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <label
                       onClick={() => setPaymentMethod('online')}
-                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                      className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
                         paymentMethod === 'online'
-                          ? 'border-[#dc2626] bg-[#dc2626]/10 text-white'
+                          ? 'border-[#dc2626] bg-[#dc2626]/10 text-white shadow-xs ring-1 ring-[#dc2626]/40'
                           : 'border-[#38322c] text-[#a8a29e] hover:bg-[#1f1b18]'
                       }`}
                     >
                       <CreditCard className="w-5 h-5 text-[#ef4444]" />
                       <div className="text-left">
-                        <div className="font-bold text-xs">Online-Zahlung</div>
-                        <div className="text-[10px] text-[#a8a29e]">PayPal, Kreditkarte, Apple Pay</div>
+                        <div className="font-bold text-xs flex items-center gap-1.5">
+                          <span>Online-Zahlung</span>
+                          <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.2 rounded font-mono">
+                            Mollie / PayPal
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-[#a8a29e]">PayPal, Apple Pay, Kreditkarte, Klarna</div>
                       </div>
                     </label>
 
                     <label
                       onClick={() => setPaymentMethod('cash')}
-                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                      className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
                         paymentMethod === 'cash'
-                          ? 'border-[#dc2626] bg-[#dc2626]/10 text-white'
+                          ? 'border-[#dc2626] bg-[#dc2626]/10 text-white shadow-xs ring-1 ring-[#dc2626]/40'
                           : 'border-[#38322c] text-[#a8a29e] hover:bg-[#1f1b18]'
                       }`}
                     >
@@ -757,7 +812,7 @@ export default function OnlineOrderModal({
                   </div>
                 </div>
 
-                {/* Zusammenfassung & Bestätigen Button */}
+                {/* Zusammenfassung & Weiter Button */}
                 <div className="p-4 bg-[#141210] rounded-2xl border border-[#2e2823] space-y-3">
                   <div className="flex justify-between items-center text-sm font-bold text-white">
                     <span>Gesamtbetrag ({cart.length} Positionen):</span>
@@ -765,18 +820,230 @@ export default function OnlineOrderModal({
                       {total.toFixed(2).replace('.', ',')} €
                     </span>
                   </div>
-                  <p className="text-[11px] text-[#78716c]">
-                    Mit Klick auf „Bestellung abschicken“ wird der Auftrag direkt an den Steinofen der Pizzeria Napoli Horrem übermittelt.
-                  </p>
-                  <button
-                    type="submit"
-                    className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.99] cursor-pointer"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Bestellung abschicken ({total.toFixed(2).replace('.', ',')} €)</span>
-                  </button>
+
+                  {paymentMethod === 'online' ? (
+                    <div>
+                      <button
+                        type="submit"
+                        className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.99] cursor-pointer"
+                      >
+                        <CreditCard className="w-4 h-4" />
+                        <span>Weiter zur sicheren Online-Zahlung ({total.toFixed(2).replace('.', ',')} €) ➔</span>
+                      </button>
+                      <p className="text-[10px] text-center text-[#78716c] mt-2 flex items-center justify-center gap-1">
+                        <Lock className="w-3 h-3 text-emerald-400" />
+                        <span>Im nächsten Schritt wählst du PayPal, Apple Pay, Kreditkarte oder Klarna</span>
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <button
+                        type="submit"
+                        className="w-full bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.99] cursor-pointer"
+                      >
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Jetzt bar bei Übergabe bestellen ({total.toFixed(2).replace('.', ',')} €)</span>
+                      </button>
+                      <p className="text-[10px] text-center text-[#78716c] mt-2">
+                        Bestellung wird direkt an den Steinofen übermittelt. Bezahlung erfolgt bei Übergabe.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </form>
+            </div>
+          )}
+
+          {/* ================= STEP 2.5: INTERAKTIVES ZAHLUNGS-GATEWAY ================= */}
+          {checkoutStep === 'payment' && (
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full flex flex-col justify-between space-y-4">
+              <div className="space-y-4">
+                {/* Zurück Button */}
+                <button
+                  type="button"
+                  onClick={() => setCheckoutStep('checkout')}
+                  className="inline-flex items-center gap-1.5 text-xs text-[#a8a29e] hover:text-white transition cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Zurück zu den Bestelldaten</span>
+                </button>
+
+                {/* Gateway Header Card */}
+                <div className="bg-[#24201d] rounded-2xl border border-[#38322c] p-4 text-center space-y-2 shadow-sm">
+                  <div className="flex items-center justify-between text-xs pb-3 border-b border-[#312a24]">
+                    <div className="flex items-center gap-2">
+                      <span className="font-black text-white text-base tracking-tight">mollie</span>
+                      <span className="text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30">
+                        Sandbox Simulator
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-[#a8a29e] flex items-center gap-1">
+                      <Lock className="w-3 h-3 text-emerald-400" />
+                      256-Bit SSL
+                    </span>
+                  </div>
+
+                  <div className="pt-1">
+                    <span className="text-[11px] text-[#a8a29e] block">Empfänger: Pizzeria Napoli Horrem</span>
+                    <div className="text-2xl sm:text-3xl font-black text-white mt-0.5 tabular-nums">
+                      {total.toFixed(2).replace('.', ',')} €
+                    </div>
+                    <span className="text-[10px] text-[#78716c] block mt-1">
+                      Demo-Zahlungsumgebung · Kein echtes Geld wird abgebucht
+                    </span>
+                  </div>
+                </div>
+
+                {/* Fehleranzeige (wenn Abbruch simuliert) */}
+                {paymentStatus === 'failed' && (
+                  <div className="bg-rose-500/15 border border-rose-500/30 rounded-2xl p-4 text-xs text-rose-200 space-y-2">
+                    <div className="flex items-center gap-2 font-bold text-rose-400">
+                      <ShieldAlert className="w-4 h-4" />
+                      <span>Zahlung abgebrochen oder fehlgeschlagen</span>
+                    </div>
+                    <p className="text-[11px] text-rose-300/80 leading-relaxed">
+                      Die Online-Zahlung wurde nicht autorisiert. Es wurde kein Geld abgebucht. Du kannst die Zahlung wiederholen oder einfach Barzahlung wählen.
+                    </p>
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentStatus('idle')}
+                        className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-2 px-3 rounded-xl text-xs transition cursor-pointer"
+                      >
+                        Zahlung wiederholen
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => finalizeOrder('cash')}
+                        className="flex-1 bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold py-2 px-3 rounded-xl text-xs transition cursor-pointer"
+                      >
+                        Stattdessen bar zahlen
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Zahlungsmethoden Auswahl */}
+                <div className="space-y-2.5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#a8a29e] block">
+                    Bevorzugte Zahlungsart wählen:
+                  </span>
+
+                  {[
+                    {
+                      id: 'paypal',
+                      name: 'PayPal',
+                      desc: 'Schnell & sicher mit Käuferschutz',
+                      badge: 'Beliebt',
+                      icon: '🅿️',
+                    },
+                    {
+                      id: 'applepay',
+                      name: 'Apple Pay / Google Pay',
+                      desc: '1-Klick Zahlung mit Face-ID / Touch-ID',
+                      icon: '🍎',
+                    },
+                    {
+                      id: 'card',
+                      name: 'Kreditkarte (Visa / Mastercard)',
+                      desc: '3D Secure Identity Check',
+                      icon: '💳',
+                    },
+                    {
+                      id: 'klarna',
+                      name: 'Klarna Sofortüberweisung',
+                      desc: 'Direkt über Online-Banking',
+                      icon: '🏦',
+                    },
+                    {
+                      id: 'wero',
+                      name: 'Wero (EPI)',
+                      desc: 'Europäisches mobiles Bezahlsystem',
+                      icon: '🇪🇺',
+                    },
+                  ].map((m) => (
+                    <label
+                      key={m.id}
+                      onClick={() => {
+                        setSelectedOnlineMethod(m.id as any);
+                        setPaymentStatus('idle');
+                      }}
+                      className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
+                        selectedOnlineMethod === m.id
+                          ? 'border-[#dc2626] bg-[#dc2626]/10 text-white shadow-xs'
+                          : 'border-[#38322c] bg-[#24201d]/60 text-[#a8a29e] hover:bg-[#24201d]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{m.icon}</span>
+                        <div>
+                          <div className="font-bold text-xs text-white flex items-center gap-1.5">
+                            <span>{m.name}</span>
+                            {m.badge && (
+                              <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.2 rounded font-bold">
+                                {m.badge}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-[#a8a29e]">{m.desc}</div>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                          selectedOnlineMethod === m.id
+                            ? 'border-[#dc2626] bg-[#dc2626]'
+                            : 'border-[#443c35]'
+                        }`}
+                      >
+                        {selectedOnlineMethod === m.id && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                        )}
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-3 border-t border-[#2e2823] space-y-2.5">
+                <button
+                  type="button"
+                  disabled={paymentStatus === 'processing'}
+                  onClick={handleExecuteOnlinePayment}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.99] cursor-pointer"
+                >
+                  {paymentStatus === 'processing' ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Autorisiere {total.toFixed(2).replace('.', ',')} € bei Zahlungsanbieter...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Zahlung jetzt autorisieren ({total.toFixed(2).replace('.', ',')} €)</span>
+                    </>
+                  )}
+                </button>
+
+                <div className="flex items-center justify-between text-[11px] text-[#78716c] px-1">
+                  <button
+                    type="button"
+                    onClick={handleSimulatePaymentCancel}
+                    className="hover:text-rose-400 underline cursor-pointer"
+                  >
+                    Fehlschlag / Abbruch simulieren
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => finalizeOrder('cash')}
+                    className="hover:text-white underline cursor-pointer"
+                  >
+                    Stattdessen bar zahlen
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -834,16 +1101,30 @@ export default function OnlineOrderModal({
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#38322c] text-[11px] text-[#a8a29e] space-y-1">
+                <div className="pt-3 border-t border-[#38322c] text-[11px] text-[#a8a29e] space-y-1.5">
                   <div>
                     <span className="text-white font-bold">Empfänger:</span> {confirmedOrder.customerName} ({confirmedOrder.phone})
                   </div>
                   <div>
                     <span className="text-white font-bold">Ziel:</span> {confirmedOrder.address}
                   </div>
-                  <div>
-                    <span className="text-white font-bold">Zahlung:</span>{' '}
-                    {confirmedOrder.paymentMethod === 'online' ? 'Online bezahlt (Gastro-Direkt)' : 'Barzahlung bei Übergabe'} ({confirmedOrder.total.toFixed(2).replace('.', ',')} €)
+                  <div className="pt-1 flex items-center justify-between bg-[#1a1714] p-2.5 rounded-xl border border-[#312a24]">
+                    <div>
+                      <span className="text-white font-bold block">Zahlung:</span>
+                      <span className="text-emerald-400 font-semibold">
+                        {confirmedOrder.paymentMethod === 'online'
+                          ? `✓ Online bezahlt via ${confirmedOrder.onlineProvider || 'Mollie'}`
+                          : 'Barzahlung bei Übergabe'}
+                      </span>
+                      {confirmedOrder.transactionId && (
+                        <span className="text-[10px] text-[#78716c] font-mono block">
+                          Transaktions-ID: {confirmedOrder.transactionId}
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-bold text-sm text-white tabular-nums">
+                      {confirmedOrder.total.toFixed(2).replace('.', ',')} €
+                    </span>
                   </div>
                 </div>
               </div>
