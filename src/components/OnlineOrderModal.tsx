@@ -445,13 +445,13 @@ export default function OnlineOrderModal({
                 {/* Kategorie Tabs */}
                 <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                   {[
-                    { id: 'all', label: 'Alle' },
-                    { id: 'pizza', label: '🍕 Steinofen-Pizza' },
-                    { id: 'pasta', label: '🍝 Pasta al Forno' },
-                    { id: 'broetchen', label: '🥖 Pizzabrötchen' },
-                    { id: 'salate', label: '🥗 Salate' },
-                    { id: 'dessert', label: '🍰 Tiramisù' },
-                    { id: 'drinks', label: '🥤 Getränke' },
+                    { id: 'all', label: 'Alle Gerichte' },
+                    { id: 'pizza', label: 'Steinofen-Pizza' },
+                    { id: 'pasta', label: 'Pasta al Forno' },
+                    { id: 'broetchen', label: 'Pizzabrötchen' },
+                    { id: 'salate', label: 'Frische Salate' },
+                    { id: 'dessert', label: 'Desserts & Dolci' },
+                    { id: 'drinks', label: 'Getränke' },
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -923,7 +923,7 @@ export default function OnlineOrderModal({
                   </div>
                 )}
 
-                {/* Zahlungsmethoden Auswahl */}
+                {/* Zahlungsmethoden Auswahl (Ohne Emojis, mit Vektor-Brand-Badges) */}
                 <div className="space-y-2.5">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#a8a29e] block">
                     Bevorzugte Zahlungsart wählen:
@@ -935,31 +935,53 @@ export default function OnlineOrderModal({
                       name: 'PayPal',
                       desc: 'Schnell & sicher mit Käuferschutz',
                       badge: 'Beliebt',
-                      icon: '🅿️',
+                      brandBadge: (
+                        <div className="w-10 h-10 rounded-xl bg-[#003087] flex items-center justify-center shrink-0 shadow-sm border border-[#004bb5]/40">
+                          <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
+                            <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.786.786 0 0 1 .774-.654h6.398c2.955 0 5.068.745 5.86 2.052.753 1.24.582 2.97-.478 4.792-1.34 2.301-3.642 3.51-6.66 3.51H8.76l-1.042 6.643a.641.641 0 0 1-.642.574z"/>
+                          </svg>
+                        </div>
+                      ),
                     },
                     {
                       id: 'applepay',
                       name: 'Apple Pay / Google Pay',
                       desc: '1-Klick Zahlung mit Face-ID / Touch-ID',
-                      icon: '🍎',
+                      brandBadge: (
+                        <div className="w-10 h-10 rounded-xl bg-black border border-stone-700 flex items-center justify-center shrink-0 shadow-sm">
+                          <span className="font-sans font-black text-xs text-white tracking-tighter">Pay</span>
+                        </div>
+                      ),
                     },
                     {
                       id: 'card',
                       name: 'Kreditkarte (Visa / Mastercard)',
                       desc: '3D Secure Identity Check',
-                      icon: '💳',
+                      brandBadge: (
+                        <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-sky-400 shadow-sm">
+                          <CreditCard className="w-5 h-5" />
+                        </div>
+                      ),
                     },
                     {
                       id: 'klarna',
                       name: 'Klarna Sofortüberweisung',
                       desc: 'Direkt über Online-Banking',
-                      icon: '🏦',
+                      brandBadge: (
+                        <div className="w-10 h-10 rounded-xl bg-[#ffb3c7] text-[#0a0a0a] flex items-center justify-center shrink-0 font-black text-xs shadow-sm">
+                          <span>K.</span>
+                        </div>
+                      ),
                     },
                     {
                       id: 'wero',
                       name: 'Wero (EPI)',
                       desc: 'Europäisches mobiles Bezahlsystem',
-                      icon: '🇪🇺',
+                      brandBadge: (
+                        <div className="w-10 h-10 rounded-xl bg-[#0f2e4a] border border-[#1e4a73] flex items-center justify-center shrink-0 shadow-sm">
+                          <span className="font-mono font-black text-[10px] text-emerald-400 tracking-wider">WERO</span>
+                        </div>
+                      ),
                     },
                   ].map((m) => (
                     <label
@@ -975,7 +997,7 @@ export default function OnlineOrderModal({
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-lg">{m.icon}</span>
+                        {m.brandBadge}
                         <div>
                           <div className="font-bold text-xs text-white flex items-center gap-1.5">
                             <span>{m.name}</span>
