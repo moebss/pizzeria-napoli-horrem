@@ -4,9 +4,10 @@ import heroPizzaImg from '../images/hero_pizza.jpg';
 interface HeroProps {
   onOpenMenu: () => void;
   onOpenContact: () => void;
+  onOpenOrder: () => void;
 }
 
-export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
+export default function Hero({ onOpenMenu, onOpenContact, onOpenOrder }: HeroProps) {
   return (
     <section id="hero" className="relative w-full min-h-[92vh] flex items-center justify-center overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24 border-b border-[#38322c]">
       
@@ -48,26 +49,32 @@ export default function Hero({ onOpenMenu, onOpenContact }: HeroProps) {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 w-full max-w-md sm:max-w-none mx-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 w-full max-w-md sm:max-w-none mx-auto flex-wrap">
+          <button
+            onClick={onOpenOrder}
+            aria-label="Online bestellen"
+            className="w-full sm:w-auto bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-[0_8px_30px_rgba(220,38,38,0.55)] transition-all transform active:scale-98 flex items-center justify-center gap-3 cursor-pointer group"
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Online bestellen</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+
           <button
             onClick={onOpenMenu}
             aria-label="Speisekarte ansehen"
-            className="w-full sm:w-auto bg-[#dc2626] hover:bg-[#b91c1c] text-white font-bold text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-[0_8px_30px_rgba(220,38,38,0.45)] transition-all transform active:scale-98 flex items-center justify-center gap-3 cursor-pointer group"
+            className="w-full sm:w-auto bg-[#24201d]/90 hover:bg-[#2d2823] text-[#fbf8f5] font-semibold text-base sm:text-lg px-6 sm:px-7 py-4 sm:py-5 rounded-full border border-[#443c35] hover:border-[#dc2626]/60 shadow-lg backdrop-blur-md transition-all flex items-center justify-center gap-2.5 sm:gap-3 active:scale-98 cursor-pointer"
           >
             <UtensilsCrossed className="w-5 h-5 text-white/90" />
-            <span>Speisekarte ansehen</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <span>Speisekarte</span>
           </button>
 
           <a
             href="tel:022739917575"
-            className="w-full sm:w-auto bg-[#24201d]/90 hover:bg-[#2d2823] text-[#fbf8f5] font-semibold text-base sm:text-lg px-6 sm:px-7 py-4 sm:py-5 rounded-full border border-[#443c35] hover:border-[#dc2626]/60 shadow-lg backdrop-blur-md transition-all flex items-center justify-center gap-2.5 sm:gap-3 active:scale-98"
+            className="w-full sm:w-auto bg-[#1a1715]/80 hover:bg-[#24201d] text-[#d6d3d1] hover:text-white font-medium text-sm sm:text-base px-5 sm:px-6 py-4 rounded-full border border-[#38322c] transition-all flex items-center justify-center gap-2"
           >
-            <Phone className="w-5 h-5 text-[#ef4444] shrink-0" />
-            <span className="tabular-nums font-bold">02273 9917575</span>
-            <span className="text-xs bg-[#16a34a]/20 text-[#4ade80] border border-[#16a34a]/40 px-2 py-0.5 rounded-full shrink-0">
-              Direkt bestellen
-            </span>
+            <Phone className="w-4 h-4 text-[#ef4444]" />
+            <span className="tabular-nums font-semibold">02273 9917575</span>
           </a>
 
           <button

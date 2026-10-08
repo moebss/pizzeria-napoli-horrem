@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Phone, Flame, Utensils, Check } from 'lucide-react';
+import { Phone, Flame, Utensils, Check, ShoppingBag } from 'lucide-react';
 
 import imgMargherita from '../images/pizza_margherita.jpg';
 import imgDiavola from '../images/pizza_diavola.jpg';
@@ -27,7 +27,11 @@ interface MenuItem {
   vegetarian?: boolean;
 }
 
-export default function ServicePrices() {
+interface ServicePricesProps {
+  onOpenOrder: () => void;
+}
+
+export default function ServicePrices({ onOpenOrder }: ServicePricesProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
 
   const categories = [
@@ -257,14 +261,21 @@ export default function ServicePrices() {
                   </div>
                 </div>
 
-                {/* Quick Call Action */}
-                <div className="pt-2">
+                {/* Quick Order Actions */}
+                <div className="pt-2 flex flex-col gap-1.5">
+                  <button
+                    onClick={onOpenOrder}
+                    className="w-full flex items-center justify-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-bold py-2.5 rounded-xl shadow-md transition-all active:scale-98 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                    <span>Online bestellen</span>
+                  </button>
                   <a
                     href="tel:022739917575"
-                    className="w-full flex items-center justify-center gap-2 bg-[#2d2823] hover:bg-[#dc2626] text-[#fbf8f5] text-xs font-bold py-2.5 rounded-xl border border-[#443c35] hover:border-[#dc2626] transition-all group/btn"
+                    className="w-full flex items-center justify-center gap-1.5 text-[11px] text-[#a8a29e] hover:text-[#fbf8f5] py-1 transition-colors"
                   >
-                    <Phone className="w-3.5 h-3.5 text-[#ef4444] group-hover/btn:text-white transition-colors" />
-                    <span>Jetzt telefonisch bestellen: 02273 9917575</span>
+                    <Phone className="w-3 h-3 text-[#ef4444]" />
+                    <span>Oder telefonisch: 02273 9917575</span>
                   </a>
                 </div>
               </div>
@@ -279,11 +290,11 @@ export default function ServicePrices() {
           </h4>
           <p className="text-sm text-[#a8a29e] max-w-2xl mx-auto leading-relaxed">
             Ob Rigatoni Napoli al Forno, gefüllte Pizzabrötchen mit Käse &amp; Salami, frische bunte Salate oder Extrawünsche: 
-            Wir bereiten jedes Gericht ofenfrisch für Sie zu. Rufen Sie uns einfach an!
+            Wir bereiten jedes Gericht ofenfrisch für Sie zu. Bestellen Sie bequem online oder rufen Sie uns an!
           </p>
         </div>
 
-        {/* Info Box: Keine Plattformgebühren & Sonderwünsche */}
+        {/* Info Box: Keine Plattformgebühren & Online-Bestellung */}
         <div className="mt-6 bg-[#24201d] border border-[#443c35] rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 text-[#4ade80] text-sm font-bold">
@@ -294,17 +305,26 @@ export default function ServicePrices() {
               Keine Plattformgebühren · Frischer & schneller bei dir
             </h4>
             <p className="text-xs sm:text-sm text-[#a8a29e]">
-              Bestellungen über Portale kosten bis zu 30% Aufschlag. Wenn du direkt bei uns anrufst, sparst du Zeit und unterstützt deinen lokalen Betrieb.
+              Lieferando und Co. verlangen bis zu 30% Gebühr. Wenn du direkt über unseren Onlineshop oder telefonisch bestellst, sparst du Zeit und unterstützt deinen lokalen Betrieb.
             </p>
           </div>
 
-          <a
-            href="tel:022739917575"
-            className="whitespace-nowrap bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-bold px-6 py-3.5 rounded-full shadow-lg transition-all flex items-center gap-2 shrink-0 active:scale-95"
-          >
-            <Phone className="w-4 h-4" />
-            <span>02273 9917575 anrufen</span>
-          </a>
+          <div className="flex flex-col sm:flex-row items-center gap-2.5 shrink-0 w-full sm:w-auto">
+            <button
+              onClick={onOpenOrder}
+              className="w-full sm:w-auto whitespace-nowrap bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-bold px-6 py-3.5 rounded-full shadow-lg transition-all flex items-center justify-center gap-2 shrink-0 active:scale-95 cursor-pointer"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>Jetzt online bestellen</span>
+            </button>
+            <a
+              href="tel:022739917575"
+              className="w-full sm:w-auto whitespace-nowrap bg-[#2d2823] hover:bg-[#38322c] text-[#fbf8f5] text-sm font-bold px-5 py-3.5 rounded-full border border-[#443c35] transition-all flex items-center justify-center gap-2 shrink-0"
+            >
+              <Phone className="w-4 h-4 text-[#ef4444]" />
+              <span>02273 9917575</span>
+            </a>
+          </div>
         </div>
 
       </div>

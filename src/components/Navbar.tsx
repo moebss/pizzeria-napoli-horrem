@@ -4,9 +4,10 @@ import { Phone, Menu, X } from 'lucide-react';
 interface NavbarProps {
   onOpenMenu: () => void;
   onOpenContact: () => void;
+  onOpenOrder: () => void;
 }
 
-export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
+export default function Navbar({ onOpenMenu, onOpenContact, onOpenOrder }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -118,13 +119,20 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
           </nav>
 
           {/* Call-to-Action & Quick Phone */}
-          <div className="hidden sm:flex items-center gap-3 shrink-0">
+          <div className="hidden sm:flex items-center gap-2.5 shrink-0">
+            <button
+              onClick={onOpenOrder}
+              className="inline-flex items-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-[0_4px_16px_rgba(220,38,38,0.4)] transition-all transform active:scale-95 group shrink-0 whitespace-nowrap cursor-pointer"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Online bestellen</span>
+            </button>
             <a
               href="tel:022739917575"
-              className="inline-flex items-center gap-2 bg-[#dc2626] hover:bg-[#b91c1c] text-white text-sm font-bold px-4.5 py-2.5 rounded-full shadow-[0_4px_16px_rgba(220,38,38,0.35)] transition-all transform active:scale-95 group shrink-0 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 bg-[#24201d] hover:bg-[#2e2823] text-[#d6d3d1] hover:text-white border border-[#443c35] text-xs font-semibold px-3.5 py-2.5 rounded-full transition-colors shrink-0 whitespace-nowrap"
             >
-              <Phone className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-              <span className="tabular-nums tracking-wide">02273 9917575</span>
+              <Phone className="w-3.5 h-3.5 text-[#ef4444]" />
+              <span className="tabular-nums">02273 9917575</span>
             </a>
           </div>
 
@@ -142,6 +150,16 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#1c1917] border-b border-[#38322c] px-4 pt-4 pb-6 mt-3 space-y-3 shadow-2xl animate-in slide-in-from-top-2">
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenOrder();
+            }}
+            className="w-full flex items-center justify-center gap-2 bg-[#dc2626] text-white font-bold py-3.5 rounded-xl shadow-lg text-base cursor-pointer mb-2"
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Jetzt online bestellen</span>
+          </button>
           <a
             href="#speisekarte"
             onClick={(e) => {
@@ -192,10 +210,10 @@ export default function Navbar({ onOpenMenu, onOpenContact }: NavbarProps) {
           <div className="pt-2">
             <a
               href="tel:022739917575"
-              className="w-full flex items-center justify-center gap-2 bg-[#dc2626] text-white font-bold py-3.5 rounded-xl shadow-lg text-base"
+              className="w-full flex items-center justify-center gap-2 bg-[#24201d] border border-[#443c35] text-[#d6d3d1] hover:text-white font-bold py-3 rounded-xl shadow-lg text-sm"
             >
-              <Phone className="w-5 h-5" />
-              <span>Direkt bestellen: 02273 9917575</span>
+              <Phone className="w-4 h-4 text-[#ef4444]" />
+              <span>Telefonisch bestellen: 02273 9917575</span>
             </a>
           </div>
         </div>

@@ -12,9 +12,11 @@ import ContactMap from './components/ContactMap';
 import Footer from './components/Footer';
 import MobileStickyBar from './components/MobileStickyBar';
 import LegalModals from './components/LegalModals';
+import OnlineOrderModal from './components/OnlineOrderModal';
 
 export default function App() {
   const [legalModal, setLegalModal] = useState<'impressum' | 'datenschutz' | null>(null);
+  const [orderModalOpen, setOrderModalOpen] = useState(false);
 
   const scrollToMenu = () => {
     const el = document.getElementById('speisekarte');
@@ -30,12 +32,16 @@ export default function App() {
     }
   };
 
+  const openOrder = () => {
+    setOrderModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-[#141210] text-[#fbf8f5] flex flex-col font-sans selection:bg-[#dc2626] selection:text-white pb-20 sm:pb-0 overflow-x-hidden">
-      <Navbar onOpenMenu={scrollToMenu} onOpenContact={scrollToContact} />
+      <Navbar onOpenMenu={scrollToMenu} onOpenContact={scrollToContact} onOpenOrder={openOrder} />
       <main className="flex-grow">
-        <Hero onOpenMenu={scrollToMenu} onOpenContact={scrollToContact} />
-        <ServicePrices />
+        <Hero onOpenMenu={scrollToMenu} onOpenContact={scrollToContact} onOpenOrder={openOrder} />
+        <ServicePrices onOpenOrder={openOrder} />
         <QualityPromise />
         <AboutUs />
         <InstagramFeed />
@@ -45,8 +51,9 @@ export default function App() {
         <ContactMap />
       </main>
       <Footer onOpenLegal={(type) => setLegalModal(type)} onOpenMenu={scrollToMenu} />
-      <MobileStickyBar onOpenMenu={scrollToMenu} onOpenContact={scrollToContact} />
+      <MobileStickyBar onOpenMenu={scrollToMenu} onOpenContact={scrollToContact} onOpenOrder={openOrder} />
       <LegalModals type={legalModal} onClose={() => setLegalModal(null)} />
+      <OnlineOrderModal isOpen={orderModalOpen} onClose={() => setOrderModalOpen(false)} />
     </div>
   );
 }
