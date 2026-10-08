@@ -275,6 +275,7 @@ export default function OnlineOrderModal({
   const finalizeOrder = (method: 'online' | 'cash', onlineProvider?: string) => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const orderId = `#NAP-${randomNum}`;
+    const dbOrderId = `ord_nap_${Date.now()}_${randomNum}`;
     const transactionId =
       method === 'online'
         ? `#MOL-${Math.floor(100000 + Math.random() * 900000)}`
@@ -305,6 +306,77 @@ export default function OnlineOrderModal({
     setConfirmedOrder(orderData);
     setCheckoutStep('confirmed');
     setCart([]);
+
+    // Live-Synchronisation mit Supabase Cloud Datenbank
+    try {
+      const SUPABASE_PROJECT_URL = 'https://xcfkwlmtxgozwokhqjdl.supabase.co';
+      const SUPABASE_ANON_KEY =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZmt3bG10eGdvendva2hxamRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NTY5OTEsImV4cCI6MjEwNzAzMjk5MX0.ttCjGJbnpfE3KcAUm-bHabpdJjV3y804dc9UREkQKhE';
+
+      fetch(`${SUPABASE_PROJECT_URL}/rest/v1/orders`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({
+          id: dbOrderId,
+          restaurant_id: 'rest_napoli_horrem_03',
+          order_number: orderId,
+          order_type: deliveryType,
+          status: 'new',
+          customer_data: {
+            name: orderData.customerName,
+            phone: orderData.phone,
+            street: street || '',
+            plzCity: plzCity || '',
+            address: orderData.address,
+            comment: orderComment || '',
+            onlineProvider: onlineProvider || null,
+            transactionId: transactionId || null,
+          },
+          desired_time: { type: 'asap' },
+          payment_method: method,
+          payment_status: method === 'online' ? 'paid' : 'pending',
+          subtotal: Math.round(subtotal * 100) / 100,
+          delivery_fee: Math.round(deliveryFee * 100) / 100,
+          total: Math.round(total * 100) / 100,
+          vat_7: Math.round(total * 0.07 * 100) / 100,
+          vat_19: 0.0,
+        }),
+      })
+        .then((res) => {
+          if (res.ok && orderData.items.length > 0) {
+            const itemsPayload = orderData.items.map((cartItem) => ({
+              order_id: dbOrderId,
+              item_name: cartItem.dish.name,
+              size_name: null,
+              extras: [],
+              quantity: cartItem.quantity,
+              unit_price: cartItem.dish.price,
+              total_price: Math.round(cartItem.dish.price * cartItem.quantity * 100) / 100,
+              vat_rate: 7,
+              comment: cartItem.note || null,
+            }));
+
+            fetch(`${SUPABASE_PROJECT_URL}/rest/v1/order_items`, {
+              method: 'POST',
+              headers: {
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                Prefer: 'return=minimal',
+              },
+              body: JSON.stringify(itemsPayload),
+            }).catch((err) => console.warn('Order items Supabase sync error:', err));
+          }
+        })
+        .catch((err) => console.warn('Order Supabase sync error:', err));
+    } catch (e) {
+      console.warn('Supabase sync trigger failed:', e);
+    }
   };
 
   // Online Zahlung ausführen (simuliert echten Mollie/PayPal Flow)
