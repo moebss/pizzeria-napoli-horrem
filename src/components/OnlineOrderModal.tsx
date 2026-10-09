@@ -271,34 +271,110 @@ export default function OnlineOrderModal({
     }
   };
 
-  // Bestellung finalisieren (entweder nach erfolgreicher Online-Zahlung oder bei Barzahlung)
-  const finalizeOrder = (method: 'online' | 'cash', onlineProvider?: string) => {
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
-    const orderId = `#NAP-${randomNum}`;
-    const dbOrderId = `ord_nap_${Date.now()}_${randomNum}`;
+  const DISH_TO_SUPABASE_MAP: Record<string, string> = {
+    'pizza-margherita': 'item_nap_01',
+    'pizza-diavola': 'item_nap_02',
+    'pizza-prosciutto': 'item_nap_03',
+    'pizza-napoli': 'item_nap_04',
+    'pizza-quattro-formaggi': 'item_nap_05',
+    'lasagne-al-forno': 'item_nap_06',
+    'pizzabroetchen-dips': 'item_nap_07',
+    'insalata-caprese': 'item_nap_08',
+    'tiramisu-hausgemacht': 'item_nap_09',
+    'san-pellegrino': 'item_nap_10',
+    'aranciata-rossa': 'item_nap_11',
+  };
+
+  // Bestellung finalisieren über die sichere Server-Validierung (RPC)
+  const finalizeOrder = async (method: 'online' | 'cash', onlineProvider?: string) => {
+    const estimatedTime =
+      deliveryType === 'delivery' ? 'ca. 30 - 45 Minuten' : 'ca. 15 - 20 Minuten';
+
     const transactionId =
       method === 'online'
         ? `#MOL-${Math.floor(100000 + Math.random() * 900000)}`
         : undefined;
 
-    const estimatedTime =
-      deliveryType === 'delivery' ? 'ca. 30 - 45 Minuten' : 'ca. 15 - 20 Minuten';
+    const plz = '50169';
+    const cleanStreet = street.trim() || (deliveryType === 'delivery' ? 'Hauptstraße 1' : 'Selbstabholung');
+
+    // Supabase RPC Aufruf zur serverseitigen Preisberechnung, MwSt-Trennung & Belegnummernvergabe
+    const SUPABASE_PROJECT_URL = 'https://xcfkwlmtxgozwokhqjdl.supabase.co';
+    const SUPABASE_ANON_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZmt3bG10eGdvendva2hxamRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NTY5OTEsImV4cCI6MjEwNzAzMjk5MX0.ttCjGJbnpfE3KcAUm-bHabpdJjV3y804dc9UREkQKhE';
+
+    let serverOrderNumber = '';
+    let serverTotal = total;
+    let serverSubtotal = subtotal;
+    let serverDeliveryFee = deliveryFee;
+
+    try {
+      const rpcPayload = {
+        p_restaurant_id: 'rest_napoli_horrem_03',
+        p_order_type: deliveryType,
+        p_payment_method: method,
+        p_customer: {
+          name: customerName.trim() || 'Gast',
+          phone: phone.trim() || '02273 000000',
+          street: cleanStreet,
+          plz: plz,
+          city: 'Kerpen-Horrem',
+          comment: orderComment.trim() || '',
+        },
+        p_items: cart.map((cartItem) => ({
+          item_id: DISH_TO_SUPABASE_MAP[cartItem.dish.id] || 'item_nap_01',
+          quantity: cartItem.quantity,
+          comment: cartItem.note || '',
+        })),
+      };
+
+      const res = await fetch(`${SUPABASE_PROJECT_URL}/rest/v1/rpc/place_order`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rpcPayload),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        serverOrderNumber = data.order_number;
+        serverTotal = Number(data.total);
+        serverSubtotal = Number(data.subtotal);
+        serverDeliveryFee = Number(data.delivery_fee);
+        if (data.guest_token) {
+          try {
+            localStorage.setItem('napoli_last_guest_token', data.guest_token);
+            localStorage.setItem('napoli_last_order_id', data.order_id);
+          } catch (_) {}
+        }
+      } else {
+        const errJson = await res.json();
+        console.warn('Supabase place_order notice:', errJson);
+      }
+    } catch (err) {
+      console.warn('Supabase place_order RPC error:', err);
+    }
+
+    const finalOrderNumber = serverOrderNumber || `#NAP-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const orderData: ConfirmedOrder = {
-      orderId,
+      orderId: finalOrderNumber,
       items: [...cart],
       deliveryType,
       paymentMethod: method,
       onlineProvider,
       transactionId,
-      total,
-      subtotal,
-      deliveryFee,
-      customerName: customerName || 'Gast',
-      phone: phone || '02273 / Angegeben',
+      total: serverTotal,
+      subtotal: serverSubtotal,
+      deliveryFee: serverDeliveryFee,
+      customerName: customerName.trim() || 'Gast',
+      phone: phone.trim() || '02273 / Vor Ort angegeben',
       address:
         deliveryType === 'delivery'
-          ? `${street}, ${plzCity}`
+          ? `${cleanStreet}, ${plzCity}`
           : 'Selbstabholung (Hauptstr. 181, 50169 Kerpen-Horrem)',
       estimatedTime,
     };
@@ -306,77 +382,6 @@ export default function OnlineOrderModal({
     setConfirmedOrder(orderData);
     setCheckoutStep('confirmed');
     setCart([]);
-
-    // Live-Synchronisation mit Supabase Cloud Datenbank
-    try {
-      const SUPABASE_PROJECT_URL = 'https://xcfkwlmtxgozwokhqjdl.supabase.co';
-      const SUPABASE_ANON_KEY =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjZmt3bG10eGdvendva2hxamRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NTY5OTEsImV4cCI6MjEwNzAzMjk5MX0.ttCjGJbnpfE3KcAUm-bHabpdJjV3y804dc9UREkQKhE';
-
-      fetch(`${SUPABASE_PROJECT_URL}/rest/v1/orders`, {
-        method: 'POST',
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          Prefer: 'return=minimal',
-        },
-        body: JSON.stringify({
-          id: dbOrderId,
-          restaurant_id: 'rest_napoli_horrem_03',
-          order_number: orderId,
-          order_type: deliveryType,
-          status: 'new',
-          customer_data: {
-            name: orderData.customerName,
-            phone: orderData.phone,
-            street: street || '',
-            plzCity: plzCity || '',
-            address: orderData.address,
-            comment: orderComment || '',
-            onlineProvider: onlineProvider || null,
-            transactionId: transactionId || null,
-          },
-          desired_time: { type: 'asap' },
-          payment_method: method,
-          payment_status: method === 'online' ? 'paid' : 'pending',
-          subtotal: Math.round(subtotal * 100) / 100,
-          delivery_fee: Math.round(deliveryFee * 100) / 100,
-          total: Math.round(total * 100) / 100,
-          vat_7: Math.round(total * 0.07 * 100) / 100,
-          vat_19: 0.0,
-        }),
-      })
-        .then((res) => {
-          if (res.ok && orderData.items.length > 0) {
-            const itemsPayload = orderData.items.map((cartItem) => ({
-              order_id: dbOrderId,
-              item_name: cartItem.dish.name,
-              size_name: null,
-              extras: [],
-              quantity: cartItem.quantity,
-              unit_price: cartItem.dish.price,
-              total_price: Math.round(cartItem.dish.price * cartItem.quantity * 100) / 100,
-              vat_rate: 7,
-              comment: cartItem.note || null,
-            }));
-
-            fetch(`${SUPABASE_PROJECT_URL}/rest/v1/order_items`, {
-              method: 'POST',
-              headers: {
-                apikey: SUPABASE_ANON_KEY,
-                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json',
-                Prefer: 'return=minimal',
-              },
-              body: JSON.stringify(itemsPayload),
-            }).catch((err) => console.warn('Order items Supabase sync error:', err));
-          }
-        })
-        .catch((err) => console.warn('Order Supabase sync error:', err));
-    } catch (e) {
-      console.warn('Supabase sync trigger failed:', e);
-    }
   };
 
   // Online Zahlung ausführen (simuliert echten Mollie/PayPal Flow)
